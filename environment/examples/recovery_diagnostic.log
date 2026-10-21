@@ -1,0 +1,5 @@
+Reproduced with: python -m orbit_recovery.cli
+steps=12566 checkpoint_every=250
+uninterrupted energy=-0.333319987157
+resumed energy=-0.302859351082
+maximum endpoint component difference=1.21551479416
