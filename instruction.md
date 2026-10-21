@@ -7,3 +7,5 @@ python -m orbit_recovery.cli
 ```
 
 Keep the package API and checkpoint error handling usable. Checkpoints with unsupported versions and invalid inputs must fail explicitly. Validate the fix with the supplied diagnostic and by comparing resumed and uninterrupted runs at different checkpoint phases. The task verifier also exercises distinct orbital parameters and long-run physical invariants.
+
+You have 3600 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.

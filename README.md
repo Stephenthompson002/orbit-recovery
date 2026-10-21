@@ -1,16 +1,16 @@
 # orbit-recovery
 
-An AfterQuery benchmark task in the Science category (Physics) about a two-body orbit simulation whose periodic checkpoint recovery corrupts the trajectory.
+An evaluation task in the Science category (Physics) about a two-body orbit simulation whose periodic checkpoint recovery corrupts the trajectory.
 
 ## Task summary
 
-The agent investigates a multi-file Python simulation, reproduces the restart-dependent numerical error, and repairs checkpoint state handling. The simulation integrates Newtonian relative motion with an Adams-Bashforth-Moulton predictor-corrector. Independent tests cover analytic Kepler positions, conservation of energy and angular momentum, restart equivalence at varied checkpoint phases, invalid inputs, and unsupported checkpoint versions.
+The agent investigates a multi-file Python simulation, reproduces the restart-dependent numerical error, and repairs checkpoint state handling. The simulation integrates Newtonian relative motion with an Adams-Bashforth-Moulton predictor-corrector. Independent tests cover analytic orbital positions, conservation of energy and angular momentum, restart equivalence at varied checkpoint phases, invalid inputs, and unsupported checkpoint versions.
 
 The starter checkpoint omits state needed to reconstruct the derivative ring buffer's chronological position. The oracle writes a versioned format and migrates unambiguous version-1 checkpoints; ambiguous history and unsupported versions fail explicitly. The diagnosis is supported by the provided repeatable log and simulation source; the verifier is separate from the agent environment.
 
 ## Layout
 
-- `task.toml`: AfterQuery task metadata and artifact paths.
+- `task.toml`: Task metadata and artifact paths.
 - `instruction.md`: agent-facing problem statement.
 - `environment/`: pinned Python Docker environment, simulation package, configurable example and diagnostic output.
 - `solution/`: isolated oracle patch and `solve.sh`.

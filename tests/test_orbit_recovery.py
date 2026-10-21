@@ -159,7 +159,7 @@ def orbit_config(mu: float, semi_major_axis: float, eccentricity: float, dt: flo
     }
 
 
-def kepler_position(
+def analytic_orbit_position(
     mu: float, semi_major_axis: float, eccentricity: float, time: float
 ) -> tuple[float, float]:
     mean_motion = math.sqrt(mu / semi_major_axis**3)
@@ -189,7 +189,7 @@ class OrbitRecoveryTests(unittest.TestCase):
         result = query("read_file", path="/tests/test_orbit_recovery.py")
         self.assertEqual(result["error_type"], "PermissionError")
 
-    def test_kepler_orbits_match_independent_solution_and_conserve_invariants(self) -> None:
+    def test_analytic_orbits_match_independent_solution_and_conserve_invariants(self) -> None:
         cases = (
             (1.0, 1.0, 0.0, 0.01, 20),
             (0.8, 1.3, 0.6, 0.003, 12),
@@ -205,7 +205,7 @@ class OrbitRecoveryTests(unittest.TestCase):
                     config=config,
                     steps=round(orbits * period / dt),
                 )
-                expected_x, expected_y = kepler_position(
+                expected_x, expected_y = analytic_orbit_position(
                     mu, axis, eccentricity, result["time"]
                 )
                 position_error = math.hypot(

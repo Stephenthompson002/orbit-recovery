@@ -8,17 +8,19 @@ artifacts = [
 ]
 
 [task]
-name = "afterquery/orbit-recovery"
+name = "orbit-recovery"
 
 [metadata]
+author_name = "Stephen Ifeoluwa Thompson"
+author_email = "134720609+Stephenthompson002@users.noreply.github.com"
 category = "Science"
 subcategory = "Physics"
 tags = ["physics", "orbital-dynamics", "numerical-integration", "checkpoint-recovery"]
 difficulty_explanation = "The visible diagnostic establishes that restart changes a long-run orbit, but the error is not caused by force units, integration step size, or a missing physical coordinate. The solver is a fourth-order Adams-Bashforth-Moulton method whose recent derivatives are maintained in a fixed-capacity circular buffer. Correct recovery requires tracing the buffer's logical chronology through the integrator, checkpoint representation, and restore path, then verifying more than one ring phase. The checkpoint format is versioned, and legacy checkpoints omit the cursor, so a complete repair must recover the old phase from the saved state when it is unambiguous instead of simply rejecting all old files. A numerically stable fix must keep energy and angular momentum accurate and make checkpointed runs agree with uninterrupted runs across varied eccentricities, gravitational parameters, time steps, and checkpoint intervals. The visible run alone is insufficient: checkpoint phases aligned to the buffer wrap can conceal the defect."
 solution_explanation = "The integrator keeps four derivatives in a ring buffer. In-memory, DerivativeHistory.start identifies the oldest chronological entry, and the integrator traverses from that index. Version 1 checkpoints save physical slots and count but omit start; loading silently assumes slot zero is oldest. Depending on the step phase, this reorders the Adams-Bashforth history and corrupts the first resumed predictor/corrector steps. Version 2 persists and validates the ring start index. The fixed loader also migrates unambiguous version 1 checkpoints by identifying the unique saved derivative matching the current state; ambiguous legacy history is rejected, as are unsupported versions."
-verification_explanation = "The verifier uses an independent Kepler-equation position solution plus energy and angular-momentum conservation for circular and eccentric orbits with distinct scales and gravitational parameters. It compares uninterrupted and checkpoint-resumed states at cuts covering all four ring-buffer phases, repeats recovery at a fixed interval, checks version 2 round trips, migrates a sealed version 1 checkpoint, rejects corrupt and unsupported versions, and rejects invalid physical inputs. Tight restart tolerances are justified because serialization should preserve the solver state exactly; physical tolerances allow numerical integration and floating-point error over multi-orbit runs. Tests run in a separate Docker image and use only the bundled Python standard-library project."
+verification_explanation = "The verifier uses an independent analytic two-body orbit solution plus energy and angular-momentum conservation for circular and eccentric orbits with distinct scales and gravitational parameters. It compares uninterrupted and checkpoint-resumed states at cuts covering all four ring-buffer phases, repeats recovery at a fixed interval, checks version 2 round trips, migrates a sealed version 1 checkpoint, rejects corrupt and unsupported versions, and rejects invalid physical inputs. Tight restart tolerances are justified because serialization should preserve the solver state exactly; physical tolerances allow numerical integration and floating-point error over multi-orbit runs. Tests run in a separate Docker image and use only the bundled Python standard-library project."
 expert_time_estimate_hours = 3
-relevant_experience = "Experience with numerical simulation, scientific Python, reproducible experiments, and checkpointed integration methods is useful. The task requires tracing state ownership across a fixed-step predictor-corrector and its persistence layer, then validating the result against independent orbital invariants and an analytic Kepler solution."
+relevant_experience = "Experience with numerical simulation, scientific Python, reproducible experiments, and checkpointed integration methods is useful. The task requires tracing state ownership across a fixed-step predictor-corrector and its persistence layer, then validating the result against independent orbital invariants and an analytic two-body solution."
 
 [verifier]
 timeout_sec = 180.0
@@ -26,7 +28,7 @@ environment_mode = "separate"
 user = 0
 
 [agent]
-timeout_sec = 3600.0
+timeout_sec = 9000.0
 
 [environment]
 build_timeout_sec = 300.0
